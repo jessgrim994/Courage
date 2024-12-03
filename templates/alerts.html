@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user_dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    {% with active_page = 'alerts' %}
+        {% include 'includes/sidebar.html' %}
+    {% endwith %}
+    
+    <main class="main-content">
+        <header class="content-header">
+            <div class="mobile-menu-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="header-title">
+                <h1>Alerts</h1>
+                <p class="subtitle">Price & Market Notifications</p>
+            </div>
+            <div class="header-actions">
+                <div class="balance-display">
+                    <span class="balance-label">Balance</span>
+                    <span class="balance-amount">$10,000.00</span>
+                </div>
+                <button class="btn-notification" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge pulse">3</span>
+                </button>
+                <button class="create-alert-btn">
+                    <i class="fas fa-plus"></i> New Alert
+                </button>
+            </div>
+        </header>
+
+        <div class="alerts-container">
+            <div class="alerts-section">
+                <h2>Active Alerts</h2>
+                <div class="alerts-grid">
+                    {% if alerts %}
+                        {% for alert in alerts %}
+                        <div class="alert-card">
+                            <div class="alert-header">
+                                <h3>{{ alert.pair }}</h3>
+                                <div class="alert-actions">
+                                    <button class="edit-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="alert-details">
+                                <div class="detail-item">
+                                    <label>Condition:</label>
+                                    <span>{{ alert.condition }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Target Price:</label>
+                                    <span>{{ alert.target_price }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Status:</label>
+                                    <span class="status {{ alert.status }}">{{ alert.status }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="no-alerts">
+                            <i class="fas fa-bell-slash"></i>
+                            <p>No active alerts</p>
+                            <button class="create-alert-btn">Create Your First Alert</button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Create Alert Modal -->
+<div class="modal" id="createAlertModal">
+    <div class="modal-content">
+        <h2>Create New Alert</h2>
+        <form id="alertForm">
+            <div class="form-group">
+                <label>Market</label>
+                <select name="pair" required>
+                    <option value="R_10">Volatility 10</option>
+                    <option value="R_25">Volatility 25</option>
+                    <option value="R_50">Volatility 50</option>
+                    <option value="R_75">Volatility 75</option>
+                    <option value="R_100">Volatility 100</option>
+                    <option value="1HZ10V">Volatility 10 (1s)</option>
+                    <option value="1HZ25V">Volatility 25 (1s)</option>
+                    <option value="1HZ50V">Volatility 50 (1s)</option>
+                    <option value="1HZ75V">Volatility 75 (1s)</option>
+                    <option value="1HZ100V">Volatility 100 (1s)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Alert Type</label>
+                <select name="alert_type" required>
+                    <option value="price">Price Alert</option>
+                    <option value="digit">Digit Pattern</option>
+                    <option value="streak">Digit Streak</option>
+                    <option value="missing">Missing Digit</option>
+                </select>
+            </div>
+            <div class="form-group condition-price">
+                <label>Condition</label>
+                <select name="condition" required>
+                    <option value="above">Price Above</option>
+                    <option value="below">Price Below</option>
+                </select>
+            </div>
+            <div class="form-group condition-price">
+                <label>Target Price</label>
+                <input type="number" name="target_price" step="0.0001" required>
+            </div>
+            <div class="form-group condition-digit" style="display: none;">
+                <label>Digit Pattern</label>
+                <input type="text" name="digit_pattern" placeholder="e.g., 1-2-3-4">
+            </div>
+            <div class="form-group condition-streak" style="display: none;">
+                <label>Streak Length</label>
+                <input type="number" name="streak_length" min="3" max="10">
+            </div>
+            <div class="modal-actions">
+                <button type="submit" class="btn-primary">Create Alert</button>
+                <button type="button" class="btn-secondary modal-close">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Notification Panel -->
+<div id="notificationPanel" class="notification-panel">
+    <div class="notification-header">
+        <h3>Notifications</h3>
+        <button class="close-panel"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="notification-list">
+        <!-- Notifications will be dynamically added here -->
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/user_dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/alerts.js') }}"></script>
+{% endblock %} 

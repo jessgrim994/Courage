@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user_dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/premium.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    {% with active_page = 'premium' %}
+        {% include 'includes/sidebar.html' %}
+    {% endwith %}
+    
+    <main class="main-content">
+        <header class="content-header">
+            <div class="mobile-menu-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="header-title">
+                <h1>Premium Membership</h1>
+                <p class="subtitle">Unlock Advanced Trading Features</p>
+            </div>
+            <div class="header-actions">
+                <div class="balance-display">
+                    <span class="balance-label">Balance</span>
+                    <span class="balance-amount">$10,000.00</span>
+                </div>
+                <button class="btn-notification" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge pulse">3</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="premium-container">
+            <!-- Current Status Section -->
+            <div class="status-section">
+                <div class="current-status {% if premium_status %}premium{% else %}standard{% endif %}">
+                    <h2>Your Current Plan</h2>
+                    <div class="status-badge">
+                        {% if premium_status %}
+                            <i class="fas fa-crown"></i> Premium Member
+                        {% else %}
+                            <i class="fas fa-user"></i> Standard Member
+                        {% endif %}
+                    </div>
+                    <div class="membership-since">
+                        Member since: {{ current_user.created_at.strftime('%B %d, %Y') }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plans Grid -->
+            <div class="plans-grid">
+                <!-- Standard Plan -->
+                <div class="plan-card standard">
+                    <div class="plan-header">
+                        <div class="plan-badge">Basic</div>
+                        <h3>Standard</h3>
+                        <div class="price">Free</div>
+                        <p class="price-subtitle">Forever</p>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> Basic market analysis</li>
+                            <li><i class="fas fa-check"></i> Standard trading tools</li>
+                            <li><i class="fas fa-check"></i> Basic alerts (up to 3)</li>
+                            <li><i class="fas fa-check"></i> Community support</li>
+                            <li><i class="fas fa-times"></i> Advanced indicators</li>
+                            <li><i class="fas fa-times"></i> Pattern recognition</li>
+                            <li><i class="fas fa-times"></i> Priority support</li>
+                            <li><i class="fas fa-times"></i> Custom alerts</li>
+                        </ul>
+                    </div>
+                    <button class="plan-btn" disabled>Current Plan</button>
+                </div>
+
+                <!-- Premium Plan -->
+                <div class="plan-card premium featured">
+                    <div class="plan-header">
+                        <div class="plan-badge">Recommended</div>
+                        <h3>Premium</h3>
+                        <div class="price">$15<span>/month</span></div>
+                        <p class="price-subtitle">Cancel anytime</p>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> Advanced market analysis</li>
+                            <li><i class="fas fa-check"></i> Professional trading tools</li>
+                            <li><i class="fas fa-check"></i> Unlimited custom alerts</li>
+                            <li><i class="fas fa-check"></i> Advanced indicators</li>
+                            <li><i class="fas fa-check"></i> Pattern recognition</li>
+                            <li><i class="fas fa-check"></i> 24/7 Priority support</li>
+                            <li><i class="fas fa-check"></i> Trading signals</li>
+                            <li><i class="fas fa-check"></i> Market insights</li>
+                        </ul>
+                    </div>
+                    <button class="plan-btn premium-btn" id="contactAdminBtn">Contact Admin</button>
+                </div>
+            </div>
+
+            <!-- Premium Benefits Section -->
+            <div class="benefits-section">
+                <h2>Premium Benefits</h2>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Advanced Analytics</h3>
+                        <p>Access to professional-grade trading tools and indicators</p>
+                    </div>
+                    <div class="benefit-card">
+                        <i class="fas fa-robot"></i>
+                        <h3>Pattern Recognition</h3>
+                        <p>AI-powered pattern detection and market analysis</p>
+                    </div>
+                    <div class="benefit-card">
+                        <i class="fas fa-bell"></i>
+                        <h3>Custom Alerts</h3>
+                        <p>Set unlimited custom alerts for any market condition</p>
+                    </div>
+                    <div class="benefit-card">
+                        <i class="fas fa-headset"></i>
+                        <h3>Priority Support</h3>
+                        <p>24/7 access to our dedicated support team</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Admin Section -->
+            <div class="contact-section">
+                <h2>Contact Admin</h2>
+                <div class="contact-methods">
+                    <div class="contact-card">
+                        <i class="fab fa-telegram"></i>
+                        <h3>Telegram</h3>
+                        <p>@CourageFX_Admin</p>
+                        <a href="https://t.me/CourageFX_Admin" class="contact-btn" target="_blank">
+                            Message on Telegram
+                        </a>
+                    </div>
+                    <div class="contact-card">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email</h3>
+                        <p>Coming Soon</p>
+                        <a href="mailto:admin@couragefx.com" class="contact-btn">
+                            Send Email
+                        </a>
+                    </div>
+                    <div class="contact-card">
+                        <i class="fab fa-whatsapp"></i>
+                        <h3>WhatsApp</h3>
+                        <p>+254703237588</p>
+                        <a href="https://wa.me/+254703237588" class="contact-btn" target="_blank">
+                            Chat on WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>How do I upgrade to Premium?</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Contact our admin through any of the methods above to process your upgrade request.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Can I cancel anytime?</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Yes, you can cancel your premium subscription at any time without any penalties.
+                        </div>
+                    </div>
+                    <!-- Add more FAQ items as needed -->
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Contact Modal -->
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Contact Admin</h2>
+        <div class="contact-options">
+            <a href="https://t.me/CourageFX_Admin" class="contact-option telegram">
+                <i class="fab fa-telegram"></i>
+                Telegram
+            </a>
+            <a href="mailto:admin@couragefx.com" class="contact-option email">
+                <i class="fas fa-envelope"></i>
+                Email
+            </a>
+            <a href="https://wa.me/1234567890" class="contact-option whatsapp">
+                <i class="fab fa-whatsapp"></i>
+                WhatsApp
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Notification Panel -->
+<div id="notificationPanel" class="notification-panel">
+    <div class="notification-header">
+        <h3>Notifications</h3>
+        <button class="close-panel"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="notification-list">
+        <!-- Notifications will be dynamically added here -->
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/user_dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/premium.js') }}"></script>
+{% endblock %} 

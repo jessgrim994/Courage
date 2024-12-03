@@ -1,0 +1,65 @@
+<nav class="side-nav">
+    <div class="nav-brand">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Courage FX" class="nav-logo">
+        <span class="nav-brand-text">Courage FX</span>
+    </div>
+    
+    <div class="nav-user">
+        <div class="user-avatar">
+            <i class="fas fa-user-circle"></i>
+        </div>
+        <span class="user-name">{{ current_user.username }}</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="{{ url_for('user_dashboard') }}" class="nav-link {% if active_page == 'dashboard' %}active{% endif %}">
+            <i class="fas fa-chart-line"></i>
+            <span>Dashboard</span>
+        </a>
+        
+        <div class="nav-section">
+            <span class="nav-section-title">Trading</span>
+            <a href="{{ url_for('markets') }}" class="nav-link {% if active_page == 'markets' %}active{% endif %}">
+                <i class="fas fa-globe"></i>
+                <span>Markets</span>
+            </a>
+            <a href="{{ url_for('matches') }}" class="nav-link {% if active_page == 'matches' %}active{% endif %}">
+                <i class="fas fa-dice"></i>
+                <span>Matches</span>
+            </a>
+            <a href="{{ url_for('rise_fall') }}" class="nav-link {% if active_page == 'rise_fall' %}active{% endif %}">
+                <i class="fas fa-arrow-trend-up"></i>
+                <span>Rise/Fall</span>
+            </a>
+            <a href="{{ url_for('over_under') }}" class="nav-link {% if active_page == 'over_under' %}active{% endif %}">
+                <i class="fas fa-arrows-up-down"></i>
+                <span>Over/Under</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <span class="nav-section-title">Notifications</span>
+            <a href="{{ url_for('alerts') }}" class="nav-link {% if active_page == 'alerts' %}active{% endif %}">
+                <i class="fas fa-bell"></i>
+                <span>Alerts</span>
+                <span class="alert-badge">3</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <span class="nav-section-title">Account</span>
+            <a href="{{ url_for('premium') }}" class="nav-link {% if active_page == 'premium' %}active{% endif %}">
+                <i class="fas fa-crown"></i>
+                <span>Premium</span>
+            </a>
+            <a href="#" class="nav-link" id="changePasswordBtn">
+                <i class="fas fa-key"></i>
+                <span>Change Password</span>
+            </a>
+            <a href="{{ url_for('logout') }}" class="nav-link">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+</nav> 

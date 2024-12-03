@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user_dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/matches.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    {% include 'includes/sidebar.html' %}
+    
+    <main class="main-content">
+        <header class="content-header">
+            <div class="mobile-menu-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="header-title">
+                <h1>Volatility Indices</h1>
+                <p class="subtitle">Ticks & Last Digits</p>
+            </div>
+            <div class="header-actions">
+                <div class="balance-display">
+                    <span class="balance-label">Balance</span>
+                    <span class="balance-amount">$10,000.00</span>
+                </div>
+                <button class="btn-notification" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge pulse">3</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="market-container">
+            <div class="market-buttons">
+                <button class="market-btn" data-symbol="R_10">Volatility 10</button>
+                <button class="market-btn" data-symbol="R_25">Volatility 25</button>
+                <button class="market-btn" data-symbol="R_50">Volatility 50</button>
+                <button class="market-btn" data-symbol="R_75">Volatility 75</button>
+                <button class="market-btn" data-symbol="R_100">Volatility 100</button>
+                <button class="market-btn" data-symbol="1HZ10V">Volatility 10 (1s)</button>
+                <button class="market-btn" data-symbol="1HZ25V">Volatility 25 (1s)</button>
+                <button class="market-btn" data-symbol="1HZ50V">Volatility 50 (1s)</button>
+                <button class="market-btn" data-symbol="1HZ75V">Volatility 75 (1s)</button>
+                <button class="market-btn" data-symbol="1HZ100V">Volatility 100 (1s)</button>
+            </div>
+
+            <div class="market-data">
+                <!-- Current Price Card -->
+                <div class="data-card">
+                    <h3><i class="fas fa-tag"></i> Current Price</h3>
+                    <div class="price-display">
+                        <span class="current-price">Loading...</span>
+                        <span class="price-change"></span>
+                    </div>
+                </div>
+
+                <!-- Last Digits Card -->
+                <div class="data-card">
+                    <h3><i class="fas fa-dice"></i> Last Digits</h3>
+                    <div class="digit-display">
+                        <!-- Last digits will be displayed here -->
+                    </div>
+                </div>
+
+                <!-- Digit Distribution Card -->
+                <div class="data-card">
+                    <h3>
+                        <i class="fas fa-chart-bar"></i> 
+                        Digit Distribution
+                        <span class="sample-count" id="sampleCount">(0 samples)</span>
+                    </h3>
+                    <div class="chart-controls">
+                        <select id="sampleSize" class="chart-select">
+                            <option value="100">Last 100 ticks</option>
+                            <option value="500">Last 500 ticks</option>
+                            <option value="1000" selected>Last 1000 ticks</option>
+                        </select>
+                    </div>
+                    <div class="digit-frequency-chart">
+                        <div class="chart-grid"></div>
+                        <div class="chart-bars"></div>
+                        <div class="chart-labels"></div>
+                    </div>
+                    <div class="chart-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Most Frequent:</span>
+                            <span class="stat-value" id="mostFrequent">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Least Frequent:</span>
+                            <span class="stat-value" id="leastFrequent">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Missing Digits Card -->
+                <div class="data-card missing-digits-card">
+                    <h3>
+                        <i class="fas fa-search"></i> Missing Digits Tracker
+                        <div class="tracker-controls">
+                            <select id="missingTicksThreshold" class="tracker-select">
+                                <option value="10">10 ticks</option>
+                                <option value="20">20 ticks</option>
+                                <option value="30">30 ticks</option>
+                                <option value="40">40 ticks</option>
+                                <option value="50" selected>50 ticks</option>
+                                <option value="100">100 ticks</option>
+                            </select>
+                        </div>
+                    </h3>
+                    <div class="missing-digits-container">
+                        <div class="missing-digits-grid">
+                            <!-- Digits 0-9 with their status -->
+                        </div>
+                        <div class="missing-stats">
+                            <h4>Average Appearance After Missing:</h4>
+                            <div class="average-stats-container">
+                                <!-- Average stats will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="possible-matches">
+                        <div class="alert-container">
+                            <!-- Alerts for possible matches will appear here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tick History Card -->
+                <div class="data-card">
+                    <h3><i class="fas fa-history"></i> Tick History</h3>
+                    <table class="tick-history">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Price</th>
+                                <th>Change</th>
+                                <th>Digit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Tick history will be displayed here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pattern Detector Card -->
+                <div class="data-card pattern-card">
+                    <h3><i class="fas fa-puzzle-piece"></i> Pattern Detector</h3>
+                    <div class="pattern-controls">
+                        <select id="patternLength" class="pattern-select">
+                            <option value="3">Last 3 digits</option>
+                            <option value="4">Last 4 digits</option>
+                            <option value="5" selected>Last 5 digits</option>
+                        </select>
+                    </div>
+                    <div class="pattern-container">
+                        <div class="current-pattern">
+                            <!-- Current pattern display -->
+                        </div>
+                        <div class="pattern-history">
+                            <!-- Recent patterns and their frequencies -->
+                        </div>
+                        <div class="pattern-stats">
+                            <div class="pattern-prediction">
+                                <!-- Next digit predictions based on patterns -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Streak Analysis Card -->
+                <div class="data-card streak-card">
+                    <h3><i class="fas fa-fire"></i> Streak Analysis</h3>
+                    <div class="streak-container">
+                        <div class="current-streaks">
+                            <!-- Current streaks for each digit -->
+                        </div>
+                        <div class="streak-stats">
+                            <div class="longest-streaks">
+                                <!-- Historical longest streaks -->
+                            </div>
+                            <div class="streak-probabilities">
+                                <!-- Probability of streak continuing -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Digit Pairs Analysis Card -->
+                <div class="data-card pairs-card">
+                    <h3><i class="fas fa-link"></i> Digit Pairs Analysis</h3>
+                    <div class="pairs-controls">
+                        <select id="pairDirection" class="pairs-select">
+                            <option value="next">Next Digit</option>
+                            <option value="previous">Previous Digit</option>
+                        </select>
+                    </div>
+                    <div class="pairs-matrix">
+                        <!-- 10x10 matrix showing digit pair frequencies -->
+                    </div>
+                    <div class="pairs-stats">
+                        <!-- Most/least common pairs -->
+                    </div>
+                </div>
+
+                <!-- Price Range Analysis Card -->
+                <div class="data-card range-card">
+                    <h3><i class="fas fa-arrows-alt-v"></i> Price Range Analysis</h3>
+                    <div class="range-stats">
+                        <div class="current-range">
+                            <!-- Current trading range -->
+                        </div>
+                        <div class="range-indicators">
+                            <!-- Overbought/Oversold indicators -->
+                        </div>
+                    </div>
+                    <div class="range-history">
+                        <!-- Historical price ranges -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Notification Panel -->
+<div id="notificationPanel" class="notification-panel">
+    <div class="notification-header">
+        <h3>Notifications</h3>
+        <button class="close-panel"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="notification-list">
+        <!-- Notifications will be dynamically added here -->
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/user_dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='js/matches.js') }}"></script>
+{% endblock %} 

@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user_dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    {% with active_page = 'dashboard' %}
+        {% include 'includes/sidebar.html' %}
+    {% endwith %}
+    
+    <main class="main-content">
+        <header class="content-header">
+            <div class="mobile-menu-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="header-title">
+                <h1>Welcome to Courage FX</h1>
+                <p class="subtitle">Your Trading Journey Starts Here</p>
+            </div>
+            <div class="header-actions">
+                <div class="balance-display">
+                    <span class="balance-label">Balance</span>
+                    <span class="balance-amount">$10,000.00</span>
+                </div>
+                <button class="btn-notification" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge pulse">3</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Market Overview Card -->
+            <div class="dashboard-card market-overview fade-in">
+                <h2><i class="fas fa-chart-line"></i> Market Overview</h2>
+                <div class="market-stats" id="marketStats">
+                    <!-- Market stats will be dynamically updated -->
+                    <div class="stat-item">
+                        <span class="stat-label">V10</span>
+                        <span class="stat-value">Loading...</span>
+                        <span class="stat-change">--</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">V25</span>
+                        <span class="stat-value">Loading...</span>
+                        <span class="stat-change">--</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">V50</span>
+                        <span class="stat-value">Loading...</span>
+                        <span class="stat-change">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trading Activity Card -->
+            <div class="dashboard-card trading-activity slide-in-right">
+                <h2><i class="fas fa-history"></i> Recent Activity</h2>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon success">
+                            <i class="fas fa-dice"></i>
+                        </div>
+                        <div class="activity-details">
+                            <span class="activity-title">Volatility 75 Pattern</span>
+                            <span class="activity-desc">Digit pattern 5-7-3-9 detected</span>
+                            <span class="activity-time">2 minutes ago</span>
+                        </div>
+                        <div class="activity-alert success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="activity-details">
+                            <span class="activity-title">Missing Digit Alert</span>
+                            <span class="activity-desc">Digit 8 missing for 50+ ticks in V100</span>
+                            <span class="activity-time">5 minutes ago</span>
+                        </div>
+                        <div class="activity-alert warning">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon info">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="activity-details">
+                            <span class="activity-title">V25 Streak Detected</span>
+                            <span class="activity-desc">Digit 3 appeared 7 times in a row</span>
+                            <span class="activity-time">15 minutes ago</span>
+                        </div>
+                        <div class="activity-alert info">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon primary">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="activity-details">
+                            <span class="activity-title">Digit Distribution</span>
+                            <span class="activity-desc">Unusual frequency: Digit 4 (32%)</span>
+                            <span class="activity-time">20 minutes ago</span>
+                        </div>
+                        <div class="activity-alert primary">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="activity-footer">
+                    <a href="{{ url_for('matches') }}" class="view-all-link">
+                        View All Activities <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="dashboard-card profile-summary slide-in-left">
+                <h2><i class="fas fa-user"></i> Profile Summary</h2>
+                <div class="profile-stats">
+                    <div class="stat-group">
+                        <div class="stat">
+                            <span class="stat-value">{{ current_user.username }}</span>
+                            <span class="stat-label">Username</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">{{ current_user.created_at.strftime('%b %d, %Y') }}</span>
+                            <span class="stat-label">Member Since</span>
+                        </div>
+                    </div>
+                    <div class="account-status">
+                        <div class="status-badge">
+                            <i class="fas fa-gem"></i>
+                            <span>Standard Account</span>
+                        </div>
+                        <a href="{{ url_for('premium') }}" class="upgrade-link">Upgrade to Premium</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="dashboard-card quick-actions fade-in-up">
+                <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+                <div class="actions-grid">
+                    <a href="{{ url_for('markets') }}" class="action-btn">
+                        <i class="fas fa-globe"></i>
+                        <span>Markets</span>
+                    </a>
+                    <a href="{{ url_for('rise_fall') }}" class="action-btn">
+                        <i class="fas fa-arrow-trend-up"></i>
+                        <span>Trade Now</span>
+                    </a>
+                    <a href="{{ url_for('alerts') }}" class="action-btn">
+                        <i class="fas fa-bell"></i>
+                        <span>Alerts</span>
+                    </a>
+                    <button class="action-btn" id="depositBtn">
+                        <i class="fas fa-wallet"></i>
+                        <span>Deposit</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modals -->
+<div id="passwordModal" class="modal">
+    <div class="modal-content">
+        <h2>Change Password</h2>
+        <form id="passwordChangeForm">
+            <div class="form-group">
+                <label for="currentPassword">Current Password</label>
+                <input type="password" id="currentPassword" required>
+            </div>
+            <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" id="newPassword" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmNewPassword">Confirm New Password</label>
+                <input type="password" id="confirmNewPassword" required>
+            </div>
+            <div class="modal-actions">
+                <button type="submit" class="btn-primary">Change Password</button>
+                <button type="button" class="btn-secondary modal-close">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Notification Panel -->
+<div id="notificationPanel" class="notification-panel">
+    <div class="notification-header">
+        <h3>Notifications</h3>
+        <button class="close-panel"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="notification-list">
+        <!-- Notifications will be dynamically added here -->
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/user_dashboard.js') }}"></script>
+{% endblock %}

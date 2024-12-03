@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user_dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/markets.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    {% with active_page = 'markets' %}
+        {% include 'includes/sidebar.html' %}
+    {% endwith %}
+    
+    <main class="main-content">
+        <header class="content-header">
+            <div class="mobile-menu-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="header-title">
+                <h1>Markets</h1>
+                <p class="subtitle">Trade Synthetic Indices</p>
+            </div>
+            <div class="header-actions">
+                <div class="balance-display">
+                    <span class="balance-label">Balance</span>
+                    <span class="balance-amount">$10,000.00</span>
+                </div>
+                <button class="btn-notification" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge pulse">3</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="markets-grid">
+            <!-- Market Filter Controls -->
+            <div class="market-controls">
+                <div class="filter-group">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="standard">Standard</button>
+                    <button class="filter-btn" data-filter="1s">1 Second</button>
+                </div>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid">
+                        <i class="fas fa-th-large"></i>
+                    </button>
+                    <button class="view-btn" data-view="list">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="markets-container">
+                <!-- Market cards will be dynamically inserted here -->
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Notification Panel -->
+<div id="notificationPanel" class="notification-panel">
+    <div class="notification-header">
+        <h3>Notifications</h3>
+        <button class="close-panel"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="notification-list">
+        <!-- Notifications will be dynamically added here -->
+    </div>
+</div>
+
+<!-- Premium Feature Modal -->
+<div class="modal" id="premiumFeatureModal">
+    <div class="modal-content">
+        <h2><i class="fas fa-crown"></i> Premium Feature</h2>
+        <p>This feature is available exclusively for Premium members.</p>
+        <div class="premium-features-list">
+            <div class="feature-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Advanced Market Analysis</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-bell"></i>
+                <span>Unlimited Custom Alerts</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-robot"></i>
+                <span>Pattern Recognition</span>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <a href="{{ url_for('premium') }}" class="btn-primary">Upgrade to Premium</a>
+            <button class="btn-secondary modal-close">Maybe Later</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/user_dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/markets.js') }}"></script>
+{% endblock %} 

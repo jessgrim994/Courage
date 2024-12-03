@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user_dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/over_under.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    {% with active_page = 'over_under' %}
+        {% include 'includes/sidebar.html' %}
+    {% endwith %}
+    
+    <main class="main-content">
+        <header class="content-header">
+            <div class="mobile-menu-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="header-title">
+                <h1>Over/Under</h1>
+                <p class="subtitle">Price Level Trading</p>
+            </div>
+            <div class="header-actions">
+                <div class="balance-display">
+                    <span class="balance-label">Balance</span>
+                    <span class="balance-amount">$10,000.00</span>
+                </div>
+                <button class="btn-notification" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge pulse">3</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="trading-section">
+            <!-- Coming Soon Banner -->
+            <div class="coming-soon-banner">
+                <i class="fas fa-tools"></i>
+                <h2>Over/Under Trading Coming Soon!</h2>
+                <p>We're developing advanced price level trading strategies.</p>
+                <div class="feature-preview">
+                    <div class="preview-item">
+                        <i class="fas fa-bullseye"></i>
+                        <span>Smart Price Levels</span>
+                    </div>
+                    <div class="preview-item">
+                        <i class="fas fa-percentage"></i>
+                        <span>Win Rate Analysis</span>
+                    </div>
+                    <div class="preview-item">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Price Distribution</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="market-selector">
+                <select id="marketSelect" class="market-select">
+                    <option value="R_10">Volatility 10 Index</option>
+                    <option value="R_25">Volatility 25 Index</option>
+                    <option value="R_50">Volatility 50 Index</option>
+                    <option value="R_75">Volatility 75 Index</option>
+                    <option value="R_100">Volatility 100 Index</option>
+                </select>
+                <div class="market-info">
+                    <span class="current-price">0.00000</span>
+                    <span class="price-change">0.00%</span>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-overlay">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <span>Loading Chart...</span>
+                </div>
+                <!-- Main trading chart will be inserted here -->
+            </div>
+            
+            <div class="trading-panel">
+                <div class="stake-input">
+                    <label>Stake Amount</label>
+                    <div class="input-group">
+                        <span class="currency">$</span>
+                        <input type="number" value="10" min="1" max="1000">
+                        <div class="quick-amounts">
+                            <button>+10</button>
+                            <button>+100</button>
+                            <button>Max</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="price-level-selector">
+                    <label>Target Price Level</label>
+                    <div class="price-input">
+                        <button class="adjust-btn minus" disabled>
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input type="number" value="0.0000" step="0.0001" disabled />
+                        <button class="adjust-btn plus" disabled>
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="time-selector">
+                    <label>Duration</label>
+                    <div class="time-buttons">
+                        <button class="time-btn active">1m</button>
+                        <button class="time-btn">5m</button>
+                        <button class="time-btn">15m</button>
+                        <button class="time-btn">1h</button>
+                    </div>
+                </div>
+                
+                <div class="trade-buttons">
+                    <button class="trade-btn over" disabled>
+                        <div class="btn-content">
+                            <span class="direction">Over</span>
+                            <span class="payout">Payout: +85%</span>
+                        </div>
+                        <span class="coming-soon-label">Coming Soon</span>
+                    </button>
+                    <button class="trade-btn under" disabled>
+                        <div class="btn-content">
+                            <span class="direction">Under</span>
+                            <span class="payout">Payout: +85%</span>
+                        </div>
+                        <span class="coming-soon-label">Coming Soon</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Price Distribution Stats -->
+            <div class="price-stats">
+                <div class="stat-card">
+                    <h3>Price Distribution</h3>
+                    <div class="distribution-chart">
+                        <!-- Price distribution chart will be added here -->
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Level Statistics</h3>
+                    <div class="level-stats">
+                        <!-- Level statistics will be populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Notification Panel -->
+<div id="notificationPanel" class="notification-panel">
+    <div class="notification-header">
+        <h3>Notifications</h3>
+        <button class="close-panel"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="notification-list">
+        <!-- Notifications will be dynamically added here -->
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/user_dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/over_under.js') }}"></script>
+{% endblock %} 

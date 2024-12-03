@@ -1,0 +1,755 @@
+:root {
+    --bg-dark: #1a1a1a;
+    --bg-card: #242424;
+    --gold-color: #FFD700;
+    --gold-hover: #FFC107;
+    --gold-text: #FFE873;
+    --text-primary: #FFFFFF;
+    --text-secondary: #B3B3B3;
+    --accent-blue: #4A90E2;
+    --accent-green: #50E3C2;
+    --accent-red: #FF5252;
+    --grid-line: rgba(255, 215, 0, 0.1);
+    --card-border: rgba(255, 215, 0, 0.3);
+    --hover-bg: rgba(255, 215, 0, 0.05);
+}
+
+/* Import Roboto Mono for numbers */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap');
+/* Import Poppins for general text */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+.market-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.market-btn {
+    padding: 1rem;
+    border: 1px solid var(--gold-color);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--gold-text);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+}
+
+.market-btn:hover, .market-btn.active {
+    background: var(--gold-color);
+    color: var(--bg-dark);
+}
+
+.market-data {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.data-card {
+    background: var(--bg-card);
+    border: 1px solid var(--card-border);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 1.5rem;
+    height: 400px;
+    overflow: hidden;
+}
+
+/* First row cards (equal sizing) */
+.data-card:nth-child(1),
+.data-card:nth-child(2),
+.data-card:nth-child(3) {
+    height: 400px;
+}
+
+/* Tick history card now in second row */
+.data-card:nth-child(4) {
+    grid-column: span 3;
+    height: 500px;
+    margin-top: 1rem;
+}
+
+.data-card h3 {
+    color: var(--text-primary);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1rem;
+}
+
+/* Price Display Styles */
+.price-display {
+    text-align: center;
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: calc(100% - 100px);
+}
+
+.current-price {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: var(--gold-text);
+    font-family: 'Roboto Mono', monospace;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.price-change {
+    font-size: 1.2rem;
+    font-family: 'Roboto Mono', monospace;
+}
+
+.price-change.positive {
+    color: var(--accent-green);
+}
+
+.price-change.negative {
+    color: var(--accent-red);
+}
+
+/* Digit Display Styles */
+.digit-display {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 1rem;
+    height: calc(100% - 100px);
+    align-content: center;
+}
+
+.digit {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: var(--bg-dark);
+    border: 1px solid var(--card-border);
+    color: var(--gold-text);
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+/* Tick History Table Styles */
+.tick-history {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.tick-history thead {
+    position: sticky;
+    top: 0;
+    background: var(--bg-dark);
+    z-index: 1;
+}
+
+.tick-history th {
+    padding: 1rem;
+    text-align: right;
+    border-bottom: 2px solid var(--gold-color);
+    color: var(--gold-text);
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.tick-history td {
+    padding: 0.8rem 1rem;
+    text-align: right;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    color: var(--gold-text);
+    font-family: 'Roboto Mono', monospace;
+}
+
+.tick-history tbody tr:hover {
+    background: rgba(255, 215, 0, 0.1);
+}
+
+/* Animation for price updates */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.price-update {
+    animation: pulse 0.5s ease-out;
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+    .data-card {
+        height: 350px;
+    }
+    
+    .data-card:nth-child(4) {
+        height: 450px;
+    }
+    
+    .current-price {
+        font-size: 3rem;
+    }
+    
+    .digit {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .market-data {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .data-card:nth-child(3) {
+        grid-column: span 2;
+    }
+    
+    .data-card:nth-child(4) {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 768px) {
+    .market-data {
+        grid-template-columns: 1fr;
+    }
+    
+    .data-card,
+    .data-card:nth-child(1),
+    .data-card:nth-child(2),
+    .data-card:nth-child(3),
+    .data-card:nth-child(4) {
+        grid-column: span 1;
+        height: auto;
+        min-height: 300px;
+    }
+    
+    .digit {
+        width: 45px;
+        height: 45px;
+        font-size: 1.4rem;
+    }
+    
+    .current-price {
+        font-size: 2.5rem;
+    }
+}
+
+/* Digit Frequency Chart Styles */
+.digit-frequency-chart {
+    height: 280px;
+    margin: 20px 10px;
+    padding: 10px 0;
+}
+
+.chart-grid {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image: linear-gradient(
+        to bottom,
+        rgba(255, 215, 0, 0.1) 1px,
+        transparent 1px
+    );
+    background-size: 100% 25%;
+    pointer-events: none;
+}
+
+.chart-bars {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    width: 100%;
+    height: 100%;
+    padding: 0 10px;
+}
+
+.chart-bar-wrapper {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding: 0 2px;
+}
+
+.chart-bar {
+    width: 80%;
+    margin: 0 auto;
+    background: linear-gradient(to top, var(--gold-color), var(--gold-hover));
+    transition: height 0.3s ease;
+    position: relative;
+    border-radius: 2px 2px 0 0;
+    min-height: 1px;
+    opacity: 0.8;
+}
+
+.chart-bar-highlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 30%;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    border-radius: 2px 2px 0 0;
+}
+
+.chart-bar-label {
+    position: absolute;
+    top: -20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--gold-text);
+    font-family: 'Roboto Mono', monospace;
+}
+
+.chart-bar-digit {
+    margin-top: 5px;
+    color: var(--gold-text);
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bold;
+}
+
+.chart-controls {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.chart-select {
+    background: var(--bg-dark);
+    border: 1px solid var(--gold-color);
+    color: var(--gold-text);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.chart-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 2rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.stat-value {
+    color: var(--text-primary);
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 500;
+    margin-top: 5px;
+}
+
+.sample-count {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-left: 5px;
+}
+
+/* Animation for bar updates */
+@keyframes barUpdate {
+    0% { transform: scaleY(0.95); }
+    50% { transform: scaleY(1.05); }
+    100% { transform: scaleY(1); }
+}
+
+.chart-bar.updating {
+    animation: barUpdate 0.3s ease;
+}
+
+.missing-digits-card {
+    grid-column: span 3;
+    height: auto !important;
+    min-height: 200px;
+}
+
+.tracker-controls {
+    float: right;
+}
+
+.tracker-select {
+    background: var(--bg-dark);
+    border: 1px solid var(--gold-color);
+    color: var(--gold-text);
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.missing-digits-container {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.missing-digits-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    flex: 2;
+}
+
+.digit-tracker {
+    background: var(--bg-dark);
+    border: 1px solid var(--gold-color);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.digit-tracker.missing {
+    background: rgba(255, 0, 0, 0.2);
+    animation: pulse 1s infinite;
+}
+
+.digit-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--gold-text);
+    margin-bottom: 0.5rem;
+}
+
+.missing-count {
+    font-size: 1rem;
+    color: var(--gold-text);
+    opacity: 0.8;
+}
+
+.avg-appearance {
+    font-size: 0.8rem;
+    color: var(--gold-text);
+    opacity: 0.6;
+    margin-top: 0.3rem;
+}
+
+.missing-stats {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.missing-stats h4 {
+    color: var(--gold-text);
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+}
+
+.avg-stat-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    color: var(--gold-text);
+    font-family: 'Roboto Mono', monospace;
+}
+
+.possible-matches {
+    margin-top: 1rem;
+}
+
+.alert-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.alert-item {
+    background: rgba(255, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    animation: pulse 1s infinite;
+}
+
+.alert-digit {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--gold-text);
+}
+
+.alert-count {
+    color: var(--gold-text);
+    font-size: 0.9rem;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+@media (max-width: 1200px) {
+    .missing-digits-container {
+        flex-direction: column;
+    }
+    
+    .missing-digits-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .missing-digits-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Pattern Detector Card Styles */
+.pattern-card {
+    grid-column: span 2;
+}
+
+.pattern-controls {
+    margin-bottom: 1rem;
+}
+
+.pattern-select {
+    background: var(--bg-dark);
+    border: 1px solid var(--gold-color);
+    color: var(--gold-text);
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.pattern-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.current-pattern {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.pattern-digit {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-dark);
+    border: 1px solid var(--card-border);
+    color: var(--gold-text);
+    margin: 0 2px;
+    border-radius: 4px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.2rem;
+}
+
+.pattern-history {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pattern-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    color: var(--gold-text);
+    font-family: 'Roboto Mono', monospace;
+}
+
+/* Streak Analysis Card Styles */
+.streak-card {
+    grid-column: span 1;
+}
+
+.streak-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.current-streaks {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.current-streak {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.streak-digit {
+    font-size: 2rem;
+    color: var(--gold-text);
+    font-weight: bold;
+    font-family: 'Roboto Mono', monospace;
+}
+
+.streak-count {
+    font-size: 1.5rem;
+    color: var(--gold-text);
+    opacity: 0.8;
+}
+
+.streak-record {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+/* Digit Pairs Card Styles */
+.pairs-card {
+    grid-column: span 2;
+}
+
+.pairs-matrix {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 2px;
+    padding: 1rem;
+    background: var(--bg-dark);
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+}
+
+.matrix-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-card);
+    color: var(--gold-text);
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.9rem;
+    border: 1px solid var(--grid-line);
+    transition: all 0.2s ease;
+}
+
+.matrix-cell:hover {
+    background: var(--hover-bg);
+    border-color: var(--gold-color);
+}
+
+.matrix-header-cell,
+.matrix-row-header {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.pairs-stats {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.pair-stat {
+    padding: 0.5rem 1rem;
+    background: var(--bg-dark);
+    border-radius: 4px;
+    color: var(--gold-text);
+    font-family: 'Roboto Mono', monospace;
+}
+
+/* Range Analysis Card Styles */
+.range-card {
+    grid-column: span 1;
+}
+
+.range-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.current-range {
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.range-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    color: var(--gold-text);
+    font-family: 'Roboto Mono', monospace;
+}
+
+.range-label {
+    opacity: 0.8;
+}
+
+.range-value {
+    font-weight: bold;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1400px) {
+    .pattern-card,
+    .pairs-card {
+        grid-column: span 3;
+    }
+    
+    .streak-card,
+    .range-card {
+        grid-column: span 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .pattern-digit {
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+    
+    .matrix-cell {
+        font-size: 0.7rem;
+    }
+}
